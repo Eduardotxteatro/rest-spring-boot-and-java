@@ -1,6 +1,8 @@
 package com.github.Eduardotxteatro.controllers;
 
 import com.github.Eduardotxteatro.exception.UnsupportedMathOperationException;
+import com.github.Eduardotxteatro.services.MathService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,85 +11,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/math")
 public class MathController {
 
-    //http://localhost:8080/math/sum/3/5
-    @RequestMapping("/sum/{numberOne}/{numberTwo}")
-    public Double sum(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo")String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))
-            throw new UnsupportedOperationException("Please, set a numeric value!");
-        return convertToDouble(numberOne) + convertToDouble(numberTwo);
-    }
-    //***********************************************************************
-    //http://localhost:8080/math/sub/3/5
-    @RequestMapping("/sub/{numberOne}/{numberTwo}")
-    public Double sub(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))
-            throw new UnsupportedOperationException("Please, set a numeric value!");
-        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+    private final MathService mathService;
+
+    public MathController(MathService mathService){
+        this.mathService = mathService;
     }
 
-
-    //***********************************************************************
-    //http://localhost:8080/math/mult/3/5
-    @RequestMapping("/mult/{numberOne}/{numberTwo}")
-    public Double mult(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))
-            throw new UnsupportedOperationException("Please, set a numeric value!");
-        return convertToDouble(numberOne) * convertToDouble(numberTwo);
+    @GetMapping("/sum/{numberOne}/{numberTwo}")
+    public Double sum(@PathVariable String numberOne, @PathVariable String numberTwo){
+        return mathService.sum(numberOne, numberTwo);
     }
-
-    //***********************************************************************
-    //http://localhost:8080/math/div/3/5
-    @RequestMapping("/div/{numberOne}/{numberTwo}")
-    public Double div(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))
-            throw new UnsupportedOperationException("Please, set a numeric value!");
-        return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    @GetMapping("/sub/{numberOne}/{numberTwo}")
+    public Double sub(@PathVariable String numberOne, @PathVariable String numberTwo){
+        return mathService.sub(numberOne, numberTwo);
     }
-    //***********************************************************************
-    //http://localhost:8080/math/med/3/5
-    @RequestMapping("/med/{numberOne}/{numberTwo}")
-    public Double med(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))
-            throw new UnsupportedOperationException("Please, set a numeric value!");
-        return (convertToDouble(numberOne) + convertToDouble(numberTwo)) /2;
+    @GetMapping("/mult/{numberOne}/{numberTwo}")
+    public Double mult(@PathVariable String numberOne, @PathVariable String numberTwo){
+        return mathService.mult(numberOne, numberTwo);
     }
-    //*****************************************************************************
-    //http://localhost:8080/math/sqrt/3
-    @RequestMapping("/sqrt/{number}")
-    public Double sqrt(
-            @PathVariable("number") String number
-    ) throws Exception {
-        if (!isNumeric(number))
-            throw new UnsupportedMathOperationException("Please, set a numeric value");
-        double value = convertToDouble(number);
-        if (value <0)
-            throw new UnsupportedMathOperationException("Cannot calculate square root of a negative number!");
-        return Math.sqrt(value);
+    @GetMapping("/div/{numberOne}/{numberTwo}")
+    public Double div(@PathVariable String numberOne, @PathVariable String numberTwo){
+        return mathService.div(numberOne, numberTwo);
     }
-    //***********************************************************************
-
-    private Double convertToDouble(String strNumber) throws IllegalArgumentException {
-
-        if (strNumber == null || strNumber.isEmpty())
-            throw new UnsupportedOperationException("Please, set a numeric value!");
-        String number = strNumber.replace(",", ".");
-        return Double.parseDouble(number);
-
+    @GetMapping("/med/{numberOne}/{numberTwo}")
+    public Double med(@PathVariable String numberOne, @PathVariable String numberTwo){
+        return mathService.med(numberOne, numberTwo);
+    }
+    @GetMapping("/sqrt/{number}")
+    public Double sqrt(@PathVariable String number){
+        return mathService.sqrt(number);
     }
 
     private boolean isNumeric(String strNumber) {
