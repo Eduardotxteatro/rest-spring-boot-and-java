@@ -1,6 +1,6 @@
 package com.github.Eduardotxteatro.controllers;
 
-import com.github.Eduardotxteatro.PersonServices;
+import com.github.Eduardotxteatro.services.PersonServices;
 import com.github.Eduardotxteatro.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,7 +25,7 @@ public class PersonController {
     method = RequestMethod.GET,
     produces = MediaType.APPLICATION_JSON_VALUE)
 
-    public Person findById(@PathVariable("id") String id){
+    public Person findById(@PathVariable("id") Long id){
         return services.findByID(id);
 
     }@RequestMapping(
@@ -52,7 +52,7 @@ public class PersonController {
             method = RequestMethod.DELETE
     )
 
-    public void delete(@PathVariable("id") String id){
+    public void delete(@PathVariable("id") Long id){
         services.delete(id);
     }
 
